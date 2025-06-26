@@ -58,11 +58,6 @@ Leo CyberSafe is an advanced cybersecurity awareness chatbot that helps users le
 
 ## Installation <a name="installation"></a>
 
-### Requirements
-- Windows 10 or newer
-- .NET 9.0 Runtime
-- 4GB RAM (minimum)
-- 100MB disk space
 
 ### Installation Steps
 1. Download the latest release from [Releases Page](https://github.com/yourusername/LeoCyberSafe/releases)
@@ -162,15 +157,6 @@ graph LR
 ├── Utilities       # Helper classes
 └── Resources       # Assets and data files
 ```
-
-## Contributing <a name="contributing"></a>
-We welcome contributions! Here's how to help:
-
-
-Please read our [Contribution Guidelines](CONTRIBUTING.md) for details.
-
-## License <a name="license"></a>
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Demo <a name="demo"></a>
 Watch our video demonstration to see Leo CyberSafe in action:
