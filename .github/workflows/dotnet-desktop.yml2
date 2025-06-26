@@ -1,0 +1,221 @@
+name: LeoCyberSafe CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  SOLUTION_FILE: 'LeoCyberSafe.sln'
+  CONFIGURATION: 'Release'
+
+jobs:
+  setup-diagnostics:
+    runs-on: windows-latest
+    name: Environment Diagnostics
+    outputs:
+      dotnet-version: ${{ steps.dotnet-version.outputs.version }}
+      os-info: ${{ steps.os-info.outputs.result }}
+      
+    steps:
+    - name: Check .NET SDK version
+      id: dotnet-version
+      run: echo "version=$(dotnet --version)" >> $GITHUB_OUTPUT
+      
+    - name: Get OS information
+      id: os-info
+      run: |
+        $osInfo = (Get-CimInstance Win32_OperatingSystem).Caption
+        echo "result=$osInfo" >> $GITHUB_OUTPUT
+      shell: pwsh
+
+  restore-dependencies:
+    runs-on: windows-latest
+    name: Restore Dependencies
+    needs: setup-diagnostics
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_FILE }} --verbosity detailed
+      
+    - name: List project dependencies
+      run: dotnet list ${{ env.SOLUTION_FILE }} package
+
+  build-debug:
+    runs-on: windows-latest
+    name: Build (Debug)
+    needs: restore-dependencies
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Build Debug configuration
+      run: |
+        dotnet build ${{ env.SOLUTION_FILE }} \
+          --configuration Debug \
+          --no-restore \
+          --verbosity detailed
+        
+        # Capture build artifacts for diagnostics
+        mkdir debug-artifacts
+        copy **/bin/Debug debug-artifacts -Recurse -Force
+        copy **/obj/Debug debug-artifacts -Recurse -Force
+      continue-on-error: true
+      shell: pwsh
+      
+    - name: Upload Debug artifacts
+      uses: actions/upload-artifact@v4
+      if: ${{ always() }}
+      with:
+        name: debug-build-artifacts
+        path: debug-artifacts
+
+  build-release:
+    runs-on: windows-latest
+    name: Build (Release)
+    needs: [restore-dependencies, build-debug]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Clean build directories
+      run: |
+        Get-ChildItem -Path . -Include bin,obj -Recurse | Remove-Item -Recurse -Force
+      shell: pwsh
+      
+    - name: Build Release configuration
+      run: |
+        dotnet build ${{ env.SOLUTION_FILE }} \
+          --configuration Release \
+          --no-restore \
+          --verbosity detailed
+          
+        # Capture build artifacts for diagnostics
+        mkdir release-artifacts
+        copy **/bin/Release release-artifacts -Recurse -Force
+        copy **/obj/Release release-artifacts -Recurse -Force
+      continue-on-error: true
+      shell: pwsh
+      
+    - name: Upload Release artifacts
+      uses: actions/upload-artifact@v4
+      if: ${{ always() }}
+      with:
+        name: release-build-artifacts
+        path: release-artifacts
+        
+    - name: Analyze build errors
+      if: ${{ failure() }}
+      run: |
+        # Parse build logs for common errors
+        $errorPatterns = @(
+          'error CS\d{4}:',
+          'MSB\d{4}:',
+          'Could not resolve',
+          'not found'
+        )
+        
+        $logFile = "build.log"
+        $errorsFound = $false
+        
+        foreach ($pattern in $errorPatterns) {
+          if (Select-String -Path $logFile -Pattern $pattern) {
+            Write-Output "::error::Detected error pattern: $pattern"
+            $errorsFound = $true
+          }
+        }
+        
+        if (-not $errorsFound) {
+          Write-Output "::warning::Build failed but no common error patterns detected"
+        }
+      shell: pwsh
+
+  diagnostics-report:
+    runs-on: windows-latest
+    name: Build Diagnostics Report
+    needs: [build-debug, build-release]
+    if: ${{ always() }}
+    steps:
+    - name: Generate report
+      run: |
+        $report = @"
+        # Build Diagnostics Report
+        
+        ## Environment
+        - .NET Version: ${{ needs.setup-diagnostics.outputs.dotnet-version }}
+        - OS: ${{ needs.setup-diagnostics.outputs.os-info }}
+        
+        ## Build Status
+        - Debug Build: ${{ needs.build-debug.result }}
+        - Release Build: ${{ needs.build-release.result }}
+        
+        ## Recommendations
+        $(
+          if (${{ needs.build-debug.result }} == 'failure') {
+            "- Investigate Debug configuration errors"
+          }
+          if (${{ needs.build-release.result }} == 'failure') {
+            "- Check Release configuration settings"
+          }
+          if (${{ needs.build-debug.result }} == 'failure' -and ${{ needs.build-release.result }} == 'failure') {
+            "- Review common project configuration issues"
+          }
+        )
+        "@
+        
+        Set-Content -Path "Build-Diagnostics-Report.md" -Value $report
+      shell: pwsh
+      
+    - name: Upload diagnostics report
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-diagnostics
+        path: Build-Diagnostics-Report.md
+
+  publish:
+    runs-on: windows-latest
+    name: Publish Application
+    needs: build-release
+    if: ${{ needs.build-release.result == 'success' }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Publish application
+      run: |
+        dotnet publish LeoCyberSafeGUI \
+          --configuration Release \
+          --output ./publish \
+          --runtime win-x64 \
+          --self-contained true \
+          -p:PublishSingleFile=true
+          
+    - name: Create installer package
+      run: |
+        7z a LeoCyberSafe-Release-${{ github.run_id }}.zip ./publish/*
+        
+    - name: Upload release artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LeoCyberSafe-Release
+        path: LeoCyberSafe-Release-${{ github.run_id }}.zip
