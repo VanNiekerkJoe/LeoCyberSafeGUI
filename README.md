@@ -161,10 +161,9 @@ graph LR
 ## Demo <a name="demo"></a>
 Watch our video demonstration to see Leo CyberSafe in action:
 
-[![Demo Video](https://placehold.co/600x400/2563eb/white?text=Watch+Demo+Video)](https://example.com/demo-video)
+[![Demo Video][https://youtu.be/kRhsLQkQivI]
 
-*Full video link: https://example.com/cybersecurity-chatbot-demo.mp4*
-
+*Full video link: https://youtu.be/kRhsLQkQivI
 ---
 
 **Created with ❤️ by Leo Van Niekerk**  
