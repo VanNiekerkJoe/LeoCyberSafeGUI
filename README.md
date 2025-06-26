@@ -1,147 +1,184 @@
-Leo CyberSafe Cybersecurity Awareness Chatbot
-Overview
-Leo CyberSafe is a comprehensive cybersecurity awareness chatbot that helps users learn about cybersecurity best practices through interactive features. This GUI-based application was built using WPF and XAML, implementing all requirements from Parts 1, 2, and 3 of the project specification.
-
-Key Features
-Part 1: Core Functionality
-Dynamic Responses: Context-aware replies to cybersecurity questions
-
-Keyword Recognition: Identifies security topics like passwords, phishing, malware
-
-Sentiment Detection: Adapts responses based on user emotion (worried, frustrated, curious)
-
-Conversation Memory: Tracks conversation history and user preferences
-
-Part 2: Security Tools
-Password Audit: Analyzes password strength with detailed feedback
-
-Phishing Test: Simulates phishing scenarios for user training
-
-Threat Scanner: Generates mock threat reports with severity scores
-
-Secure Notes: Encrypted note storage with master password protection
-
-Security Tips: Contextual cybersecurity advice based on user queries
-
-Part 3: Advanced Features (GUI)
-Task Assistant:
-
-Create cybersecurity-related tasks with titles, descriptions, and due dates
-
-Set reminders (1 day, 3 days, or 1 week before due date)
-
-Mark tasks as completed
-
-View and manage all tasks in a dedicated panel
-
-Cybersecurity Quiz Game:
-
-10-question quiz on cybersecurity fundamentals
-
-Multiple-choice format with immediate feedback
-
-Score tracking and performance evaluation
-
-NLP Simulation:
-
-Natural language processing for task creation ("Remind me to update password tomorrow")
-
-Flexible command recognition ("Add task", "Set reminder", etc.)
-
-Context-aware responses to user requests
-
-Activity Log:
-
-Tracks user interactions and system actions
-
-Shows last 10 activities with timestamps
-
-Accessible via "Show activity log" command
-
-Tutorial
-Getting Started
-Launch LeoCyberSafeGUI.exe
-
-The chatbot will greet you and explain its capabilities
-
-Type your questions or commands in the input field at the bottom
-
-Using Core Features
-Ask cybersecurity questions: "How do I create strong passwords?"
-
-Request security tips: "Give me a phishing prevention tip"
-
-Check password strength: Click "🔒 Password Audit" in Security Tools
-
-Run security tests: Use "🎣 Phishing Test" or "🛡️ Threat Scan" buttons
-
-Using Task Assistant
-Go to "📝 Tasks & Notes" tab
-
-Enter task details:
-
-Title: "Enable 2FA"
-
-Description: "Set up two-factor authentication"
-
-Due Date: Select a date
-
-Check "Set Reminder" and choose time frame
-
-Click "➕ Add Task"
-
-View tasks in the task list
-
-Mark tasks complete by selecting and clicking "✅ Complete"
-
-Playing the Quiz Game
-Navigate to "🎮 Quiz Game" tab
-
-Click "🎲 Start Quiz"
-
-Read each question and select your answer
-
-Click "✅ Submit" to get immediate feedback
-
-View your final score after completing all questions
-
-Using NLP Features
-Natural language commands:
-
-"Add task to update my software next week"
-
-"Remind me to check privacy settings tomorrow"
-
-"Show my activity log"
-
-"What have you done for me today?"
-
-Viewing Activity Log
-Go to "📋 Activity Log" tab
-
-See recent activities with timestamps
-
-Or type "Show activity log" in the chat
-
-Installation
-Download the latest release from [GitHub Releases Link]
-
-Run LeoCyberSafe-Installer.exe
-
-Follow the installation wizard
-
-Launch from Start Menu or desktop shortcut
-
-Video Demo
-[Insert link to screencast video demonstration here]
-
-text
-https://example.com/cybersecurity-chatbot-demo.mp4
-Development Notes
-Built with WPF/XAML for the GUI
-
-Uses MVVM pattern for maintainability
-
-Implements modern cybersecurity best practices
-
-Features responsive design with light/dark mode
+# Leo CyberSafe Cybersecurity Awareness Chatbot
+
+![Project Banner](https://placehold.co/1000x300/1e3a8a/white?text=Leo+CyberSafe+-+Your+Digital+Security+Companion)  
+*Comprehensive cybersecurity education and protection in one application*
+
+## Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage Guide](#usage-guide)
+- [Technical Details](#technical-details)
+- [Contributing](#contributing)
+- [License](#license)
+- [Demo](#demo)
+
+## Introduction <a name="introduction"></a>
+Leo CyberSafe is an advanced cybersecurity awareness chatbot that helps users learn about digital security through interactive features. Built with WPF and .NET 9, this application combines chatbot functionality with educational tools to make cybersecurity accessible to everyone.
+
+**Key Objectives**:
+- Educate users on cybersecurity best practices
+- Provide interactive tools for security self-assessment
+- Help users manage security-related tasks
+- Test knowledge through engaging quizzes
+
+## Features <a name="features"></a>
+
+### 🗣️ Intelligent Chatbot
+- Context-aware responses to cybersecurity questions
+- Sentiment analysis to adapt responses to user emotions
+- Conversation memory for personalized interactions
+- Natural language processing for task management
+
+### 🛡️ Security Toolkit
+| Feature | Description |
+|---------|-------------|
+| **Password Auditor** | Analyze password strength with detailed feedback |
+| **Phishing Simulator** | Test your ability to identify phishing attempts |
+| **Threat Scanner** | Generate mock security reports with vulnerability analysis |
+| **Secure Notes** | Encrypted note storage with master password protection |
+| **Security Tips** | Contextual cybersecurity advice based on user queries |
+
+### 📝 Task Management
+- Create security-related tasks with reminders
+- Set due dates and notification preferences
+- Track completion status
+- Receive timely reminders for important actions
+
+### 🎮 Cybersecurity Quiz
+- 10-question interactive quiz on security fundamentals
+- Multiple-choice format with immediate feedback
+- Score tracking and performance evaluation
+- Educational explanations for each answer
+
+### 📊 Activity Logging
+- Track all user interactions and system actions
+- View timestamped history of activities
+- Accessible through "Show activity log" command
+
+## Installation <a name="installation"></a>
+
+### Requirements
+- Windows 10 or newer
+- .NET 9.0 Runtime
+- 4GB RAM (minimum)
+- 100MB disk space
+
+### Installation Steps
+1. Download the latest release from [Releases Page](https://github.com/yourusername/LeoCyberSafe/releases)
+2. Run the installer `LeoCyberSafe-Installer.exe`
+3. Follow the installation wizard prompts
+4. Launch from Start Menu or desktop shortcut
+
+```bash
+# For developers
+git clone https://github.com/yourusername/LeoCyberSafe.git
+cd LeoCyberSafe
+dotnet restore
+dotnet build
+dotnet run --project LeoCyberSafeGUI
+```
+
+## Usage Guide <a name="usage-guide"></a>
+
+### Getting Started
+1. Launch Leo CyberSafe
+2. Type your cybersecurity questions in the chat interface
+3. Explore the various tabs for different security tools
+
+### Key Interactions
+| Command | Example | Response |
+|---------|---------|----------|
+| **Ask question** | "How do I create strong passwords?" | Detailed password best practices |
+| **Add task** | "Remind me to update software next week" | Creates task with reminder |
+| **Start quiz** | "Begin cybersecurity test" | Launches interactive quiz |
+| **View logs** | "Show activity log" | Displays recent activities |
+| **Security tools** | "Run password audit" | Analyzes password strength |
+
+### Task Management
+```mermaid
+graph TD
+    A[Create Task] --> B{Set Reminder?}
+    B -->|Yes| C[Select Reminder Timeframe]
+    B -->|No| D[Save Task]
+    C --> D
+    D --> E[Task Appears in List]
+    E --> F{Task Due?}
+    F -->|Yes| G[Receive Notification]
+    F -->|No| H[Continue Monitoring]
+```
+
+### Quiz Flow
+1. Navigate to Quiz Game tab
+2. Click "Start Quiz"
+3. Answer 10 multiple-choice questions
+4. Receive immediate feedback after each question
+5. Get final score with performance evaluation
+
+## Technical Details <a name="technical-details"></a>
+
+### Architecture
+```mermaid
+graph LR
+    A[GUI Layer] --> B[Business Logic]
+    B --> C[Data Access]
+    C --> D[Local Storage]
+    
+    A --> E[Security Tools]
+    A --> F[Task Manager]
+    A --> G[Quiz Engine]
+    
+    B --> H[Natural Language Processor]
+    H --> I[Response Generator]
+```
+
+### Technologies
+- **Frontend**: WPF/XAML with MVVM pattern
+- **Backend**: .NET 9.0
+- **Security**: AES-256 encryption for secure notes
+- **Dependencies**:
+  - `Microsoft.VisualBasic` for input dialogs
+  - `System.Drawing.Common` for UI elements
+  - `System.Security.Cryptography` for encryption
+
+### File Structure
+```
+/LeoCyberSafe
+│
+├── Core
+│   ├── Models      # Data models
+│   └── Services    # Business logic services
+│
+├── Features
+│   ├── Password    # Password audit tools
+│   ├── Phishing    # Phishing simulation
+│   ├── Questions   # Question-answer system
+│   └── Response    # Response generation
+│
+├── GUI             # WPF application
+│   ├── Views       # XAML views
+│   └── ViewModels  # ViewModel classes
+│
+├── Utilities       # Helper classes
+└── Resources       # Assets and data files
+```
+
+## Contributing <a name="contributing"></a>
+We welcome contributions! Here's how to help:
+
+
+Please read our [Contribution Guidelines](CONTRIBUTING.md) for details.
+
+## License <a name="license"></a>
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Demo <a name="demo"></a>
+Watch our video demonstration to see Leo CyberSafe in action:
+
+[![Demo Video](https://placehold.co/600x400/2563eb/white?text=Watch+Demo+Video)](https://example.com/demo-video)
+
+*Full video link: https://example.com/cybersecurity-chatbot-demo.mp4*
+
+---
+
+**Created with ❤️ by Leo Van Niekerk**  
